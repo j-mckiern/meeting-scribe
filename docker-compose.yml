@@ -1,0 +1,20 @@
+services:
+  scribe:
+    build: .
+    container_name: meeting-scribe
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # Timestamps in summaries follow this. Server VMs default to UTC.
+      TZ: ${TZ:-UTC}
+      DATA_DIR: /app/data
+    volumes:
+      # Transcripts must survive container rebuilds - /retry depends on them.
+      - ./data:/app/data
+    # Reap zombie processes (ffmpeg subprocesses land here from M1 onward).
+    init: true
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
