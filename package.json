@@ -12,7 +12,10 @@
     "dev": "tsx watch src/index.ts",
     "register": "tsx src/bot/register.ts",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.scripts.json",
-    "inspect": "tsx scripts/inspect-manifest.ts"
+    "inspect": "tsx scripts/inspect-manifest.ts",
+    "transcribe": "tsx scripts/transcribe-dir.ts",
+    "summarize": "tsx scripts/summarize-dir.ts",
+    "check-summaries": "tsx scripts/check-summaries.ts"
   },
   "dependencies": {
     "@discordjs/opus": "^0.10.0",
@@ -21,7 +24,8 @@
     "dotenv": "^16.4.5",
     "libsodium-wrappers": "^0.7.15",
     "prism-media": "^1.3.5",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zod-to-json-schema": "^3.25.2"
   },
   "devDependencies": {
     "@types/libsodium-wrappers": "^0.7.14",

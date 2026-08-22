@@ -12,3 +12,16 @@ export function formatDuration(ms: number): string {
 
   return parts.join(' ');
 }
+
+/** 83_400 -> "01:23.400". A position on the meeting's timeline, not a duration. */
+export function formatClock(ms: number): string {
+  const minutes = Math.floor(ms / 60_000);
+  const seconds = Math.floor((ms % 60_000) / 1000);
+  const millis = Math.floor(ms % 1000);
+
+  return (
+    `${String(minutes).padStart(2, '0')}:` +
+    `${String(seconds).padStart(2, '0')}.` +
+    `${String(millis).padStart(3, '0')}`
+  );
+}

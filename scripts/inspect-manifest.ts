@@ -1,7 +1,7 @@
 import { stat } from 'node:fs/promises';
 import { basename, join, resolve } from 'node:path';
 import { readManifest } from '../src/capture/manifest.js';
-import { formatDuration } from '../src/util/time.js';
+import { formatClock, formatDuration } from '../src/util/time.js';
 import type { AudioSegment, MeetingManifest } from '../src/capture/types.js';
 
 /**
@@ -82,7 +82,7 @@ function printTimeline(manifest: MeetingManifest): void {
   for (const segment of manifest.segments) {
     const end = segment.startMs + segment.durationMs;
     console.log(
-      `  [${clock(segment.startMs)} - ${clock(end)}]  ` +
+      `  [${formatClock(segment.startMs)} - ${formatClock(end)}]  ` +
         `${segment.displayName.padEnd(width)}  ` +
         `${(segment.durationMs / 1000).toFixed(1).padStart(6)}s  ` +
         basename(segment.file),
@@ -161,14 +161,6 @@ function mergedSpan(segments: AudioSegment[]): number {
   }
 
   return total + (cursor - start);
-}
-
-/** 83_400 -> "01:23.400" */
-function clock(ms: number): string {
-  const minutes = Math.floor(ms / 60_000);
-  const seconds = Math.floor((ms % 60_000) / 1000);
-  const millis = ms % 1000;
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${String(millis).padStart(3, '0')}`;
 }
 
 main().catch((error: unknown) => {

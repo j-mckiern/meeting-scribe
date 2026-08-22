@@ -5,3 +5,5 @@ data/
 *.log
 .claude/
 CLAUDE.md
+.venv-whisper/
+
