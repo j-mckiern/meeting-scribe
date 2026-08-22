@@ -5,6 +5,7 @@ import { log } from './logger.js';
 import { createClient } from './bot/client.js';
 import { commands } from './bot/commands/index.js';
 import { disconnectFromGuild } from './capture/discord/connection.js';
+import { stopRecording } from './capture/discord/recorder.js';
 import { SessionError, sessions } from './session/state.js';
 
 const client = createClient();
@@ -60,18 +61,30 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
  * Docker sends SIGTERM on `docker compose stop`. Leave voice channels
  * deliberately rather than letting the connection time out, so the bot doesn't
  * linger as a ghost member of the channel.
+ *
+ * Recorders are flushed first: a restart mid-meeting should cost the tail of
+ * the recording, not the manifest that makes the rest of it usable.
  */
-function shutdown(signal: string): void {
+let shuttingDown = false;
+
+async function shutdown(signal: string): Promise<void> {
+  if (shuttingDown) return;
+  shuttingDown = true;
+
   log.info(`Received ${signal}, shutting down`);
 
-  for (const session of sessions.all()) {
-    disconnectFromGuild(session.guildId);
-  }
+  await Promise.allSettled(
+    sessions.all().map(async (session) => {
+      await stopRecording(session.guildId);
+      disconnectFromGuild(session.guildId);
+    }),
+  );
 
-  void client.destroy().finally(() => process.exit(0));
+  await client.destroy().catch(() => {});
+  process.exit(0);
 }
 
-process.on('SIGTERM', () => shutdown('SIGTERM'));
-process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => void shutdown('SIGTERM'));
+process.on('SIGINT', () => void shutdown('SIGINT'));
 
 await client.login(config.DISCORD_BOT_TOKEN);
