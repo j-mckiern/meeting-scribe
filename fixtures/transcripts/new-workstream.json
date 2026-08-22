@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "meetingId": "new-workstream",
+  "title": "Weekly sync",
+  "startedAt": "2026-08-20T14:00:00.000Z",
+  "endedAt": "2026-08-20T14:30:00.000Z",
+  "transcribedAt": "2026-08-20T14:30:00.000Z",
+  "provider": "fixture",
+  "model": "hand-written",
+  "participants": [
+    {
+      "userId": "1",
+      "displayName": "Aoife"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom"
+    }
+  ],
+  "utterances": [
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 0,
+      "durationMs": 2340,
+      "text": "Right, let's talk about Project Aurora."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 2840,
+      "durationMs": 3960,
+      "text": "This is the new customer portal we're starting. Tom is leading it."
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 7300,
+      "durationMs": 4560,
+      "text": "We've got the designs signed off. I'm starting on the scaffolding next week."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 12360,
+      "durationMs": 6840,
+      "text": "Good. And briefly on the main workstream, the auth rewrite shipped on Friday and there's nothing else outstanding."
+    }
+  ],
+  "stats": {
+    "segments": 4,
+    "transcribed": 4,
+    "skippedQuiet": 0,
+    "discarded": 0,
+    "failed": 0
+  },
+  "timing": {
+    "audioSeconds": 19.7,
+    "prepareSeconds": 0,
+    "transcribeSeconds": 1,
+    "realtimeFactor": 1
+  }
+}

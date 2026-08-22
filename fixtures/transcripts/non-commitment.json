@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "meetingId": "non-commitment",
+  "title": "AOB",
+  "startedAt": "2026-08-20T14:00:00.000Z",
+  "endedAt": "2026-08-20T14:30:00.000Z",
+  "transcribedAt": "2026-08-20T14:30:00.000Z",
+  "provider": "fixture",
+  "model": "hand-written",
+  "participants": [
+    {
+      "userId": "1",
+      "displayName": "Aoife"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom"
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean"
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya"
+    }
+  ],
+  "utterances": [
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 0,
+      "durationMs": 2000,
+      "text": "Anything else before we wrap up?"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 2500,
+      "durationMs": 4440,
+      "text": "Someone should probably look at the flaky integration tests at some point."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 7440,
+      "durationMs": 4020,
+      "text": "Yeah, I might take a look if I get time this week, but no promises."
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 11960,
+      "durationMs": 3960,
+      "text": "We could also think about upgrading the test runner at some stage."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 16420,
+      "durationMs": 3900,
+      "text": "All good ideas. Nobody is taking any of them on right now though."
+    }
+  ],
+  "stats": {
+    "segments": 5,
+    "transcribed": 5,
+    "skippedQuiet": 0,
+    "discarded": 0,
+    "failed": 0
+  },
+  "timing": {
+    "audioSeconds": 20.82,
+    "prepareSeconds": 0,
+    "transcribeSeconds": 1,
+    "realtimeFactor": 1
+  }
+}

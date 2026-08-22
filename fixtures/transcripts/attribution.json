@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "meetingId": "attribution",
+  "title": "Pipeline planning",
+  "startedAt": "2026-08-20T14:00:00.000Z",
+  "endedAt": "2026-08-20T14:30:00.000Z",
+  "transcribedAt": "2026-08-20T14:30:00.000Z",
+  "provider": "fixture",
+  "model": "hand-written",
+  "participants": [
+    {
+      "userId": "1",
+      "displayName": "Aoife"
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya"
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean"
+    }
+  ],
+  "utterances": [
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 0,
+      "durationMs": 5940,
+      "text": "Moving on to the data pipeline. Someone needs to write the migration script for the customer table."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 6440,
+      "durationMs": 2760,
+      "text": "Priya, you know that table better than anyone."
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 9700,
+      "durationMs": 3660,
+      "text": "I do, but I'm out on leave all next week. I can't take it on."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 13860,
+      "durationMs": 3960,
+      "text": "I'll pick it up. Priya, could you send me your notes on the table?"
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 18320,
+      "durationMs": 2340,
+      "text": "Sure, I'll send them over to you today."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 21160,
+      "durationMs": 2580,
+      "text": "Great. Sean owns the migration script then."
+    }
+  ],
+  "stats": {
+    "segments": 6,
+    "transcribed": 6,
+    "skippedQuiet": 0,
+    "discarded": 0,
+    "failed": 0
+  },
+  "timing": {
+    "audioSeconds": 24.24,
+    "prepareSeconds": 0,
+    "transcribeSeconds": 1,
+    "realtimeFactor": 1
+  }
+}

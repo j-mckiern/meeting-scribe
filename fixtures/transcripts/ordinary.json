@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "meetingId": "ordinary",
+  "title": "Weekly sync",
+  "startedAt": "2026-08-20T14:00:00.000Z",
+  "endedAt": "2026-08-20T14:30:00.000Z",
+  "transcribedAt": "2026-08-20T14:30:00.000Z",
+  "provider": "fixture",
+  "model": "hand-written",
+  "participants": [
+    {
+      "userId": "1",
+      "displayName": "Aoife"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom"
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean"
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya"
+    }
+  ],
+  "utterances": [
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 0,
+      "durationMs": 3840,
+      "text": "Okay, let's get started. Moving on to the main workstream first."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 4340,
+      "durationMs": 3840,
+      "text": "We've got the auth service rewrite. Tom, where are we with that?"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 8680,
+      "durationMs": 7200,
+      "text": "The rewrite is about eighty percent done. The token refresh path is the last piece. I should have it finished by Friday."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 16380,
+      "durationMs": 6420,
+      "text": "Good. So are we agreed we ship the auth rewrite behind a feature flag rather than doing a big bang release?"
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 23300,
+      "durationMs": 4260,
+      "text": "Yeah, a flag makes sense to me. Much less risk if something goes wrong."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 28060,
+      "durationMs": 6120,
+      "text": "Right, that's decided then. Feature flag it is. Tom, can you add the flag wiring as part of your work?"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 34680,
+      "durationMs": 2000,
+      "text": "Yep, I'll do that."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 37180,
+      "durationMs": 2100,
+      "text": "Let's talk about the data pipeline."
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 39780,
+      "durationMs": 5820,
+      "text": "The nightly job is still failing about one run in five. It's a timeout on the big customer table."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 46100,
+      "durationMs": 2000,
+      "text": "Do we know why it got slower?"
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 48600,
+      "durationMs": 3660,
+      "text": "Not yet. I'll dig into the query plan this week and find out."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 52760,
+      "durationMs": 2280,
+      "text": "Okay. And on-call, anything to report?"
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 55540,
+      "durationMs": 7020,
+      "text": "Quiet week. Two pages, both false alarms from the disk alert. We should probably retune that threshold at some point."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 63060,
+      "durationMs": 2040,
+      "text": "Noted, but let's leave it for now."
+    }
+  ],
+  "stats": {
+    "segments": 14,
+    "transcribed": 14,
+    "skippedQuiet": 0,
+    "discarded": 0,
+    "failed": 0
+  },
+  "timing": {
+    "audioSeconds": 65.6,
+    "prepareSeconds": 0,
+    "transcribeSeconds": 1,
+    "realtimeFactor": 1
+  }
+}

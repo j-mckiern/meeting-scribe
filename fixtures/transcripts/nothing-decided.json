@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "meetingId": "nothing-decided",
+  "title": "Quick sync",
+  "startedAt": "2026-08-20T14:00:00.000Z",
+  "endedAt": "2026-08-20T14:30:00.000Z",
+  "transcribedAt": "2026-08-20T14:30:00.000Z",
+  "provider": "fixture",
+  "model": "hand-written",
+  "participants": [
+    {
+      "userId": "1",
+      "displayName": "Aoife"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom"
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya"
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean"
+    }
+  ],
+  "utterances": [
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 0,
+      "durationMs": 3060,
+      "text": "Just a quick sync today, nothing we need to decide."
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 3560,
+      "durationMs": 5220,
+      "text": "I've been reading through the old billing code. It's messy but I don't have a plan yet."
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 9280,
+      "durationMs": 4860,
+      "text": "Same here really. I've been on support rotation so not much progress on anything."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 14640,
+      "durationMs": 7140,
+      "text": "I looked at the dashboard library options. There are three and they all look pretty similar. I'm not ready to pick one."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 22280,
+      "durationMs": 2880,
+      "text": "That's fine. We'll come back to it another week."
+    }
+  ],
+  "stats": {
+    "segments": 5,
+    "transcribed": 5,
+    "skippedQuiet": 0,
+    "discarded": 0,
+    "failed": 0
+  },
+  "timing": {
+    "audioSeconds": 25.66,
+    "prepareSeconds": 0,
+    "transcribeSeconds": 1,
+    "realtimeFactor": 1
+  }
+}
