@@ -1,5 +1,7 @@
 import { GuildMember, MessageFlags, PermissionsBitField } from 'discord.js';
-import { connectToChannel } from '../../../capture/discord/connection.js';
+import type { VoiceConnection } from '@discordjs/voice';
+import { connectToChannel, disconnectFromGuild } from '../../../capture/discord/connection.js';
+import { startRecording, stopRecording } from '../../../capture/discord/recorder.js';
 import { sessions } from '../../../session/state.js';
 import { log } from '../../../logger.js';
 import type { Subcommand } from '../types.js';
@@ -76,8 +78,10 @@ export const start: Subcommand = {
 
     const guildId = interaction.guildId;
 
+    let connection: VoiceConnection;
+
     try {
-      await connectToChannel(voiceChannel, {
+      connection = await connectToChannel(voiceChannel, {
         // If the connection dies mid-meeting and can't be recovered, release
         // the session slot. Without this the store still says 'recording' with
         // no voice connection behind it: /meeting-scribe status lies, and
@@ -89,6 +93,13 @@ export const start: Subcommand = {
           } catch {
             // Already ended by /meeting-scribe stop or /meeting-scribe cancel - nothing to do.
           }
+
+          // Flush whatever was captured before the drop and finalise the
+          // manifest, so a lost connection costs the tail of the meeting
+          // rather than all of it.
+          void stopRecording(guildId).catch((error: unknown) => {
+            log.error('Failed to finalise recording after connection loss', error);
+          });
 
           log.warn('Recording ended early: voice connection lost', { guildId });
 
@@ -105,6 +116,22 @@ export const start: Subcommand = {
       log.error('Failed to join voice channel', error);
       await interaction.editReply(
         error instanceof Error ? error.message : 'Could not join the voice channel.',
+      );
+      return;
+    }
+
+    // Capture is started separately from the connection so that a failure to
+    // create the meeting directory is reported as a failure to start, not as
+    // a meeting that silently records nothing.
+    try {
+      await startRecording({ connection, channel: voiceChannel, meeting: session });
+    } catch (error) {
+      disconnectFromGuild(guildId);
+      sessions.end(guildId);
+      log.error('Failed to start capture', error);
+      await interaction.editReply(
+        'Joined the channel but could not start recording. ' +
+          'The data directory is most likely not writable. Check the bot logs.',
       );
       return;
     }

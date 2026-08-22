@@ -1,0 +1,10 @@
+{
+  // The build compiles src/ alone (rootDir), which would leave scripts/
+  // unchecked. This config exists purely so `npm run typecheck` covers both.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "."
+  },
+  "include": ["src/**/*.ts", "scripts/**/*.ts"]
+}

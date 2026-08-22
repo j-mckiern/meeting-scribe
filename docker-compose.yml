@@ -9,9 +9,10 @@ services:
       TZ: ${TZ:-UTC}
       DATA_DIR: /app/data
     volumes:
-      # Transcripts must survive container rebuilds - /retry depends on them.
+      # Recordings and transcripts must survive container rebuilds - /retry
+      # depends on them, and a restart mid-meeting must not lose the audio.
       - ./data:/app/data
-    # Reap zombie processes (ffmpeg subprocesses land here from M1 onward).
+    # Reap zombie processes (ffmpeg subprocesses land here from M2 onward).
     init: true
     logging:
       driver: json-file

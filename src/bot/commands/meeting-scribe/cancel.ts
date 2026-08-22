@@ -1,5 +1,7 @@
 import { MessageFlags } from 'discord.js';
 import { disconnectFromGuild } from '../../../capture/discord/connection.js';
+import { stopRecording } from '../../../capture/discord/recorder.js';
+import { deleteMeeting } from '../../../storage/paths.js';
 import { sessions } from '../../../session/state.js';
 import { log } from '../../../logger.js';
 import type { Subcommand } from '../types.js';
@@ -37,13 +39,18 @@ export const cancel: Subcommand = {
     // require() throws a user-facing SessionError if nothing is running.
     sessions.require(interaction.guildId);
 
+    // Deleting the directory out from under a running recorder would leave it
+    // writing into an unlinked tree, so stop capture before removing anything.
+    await interaction.deferReply();
+    await stopRecording(interaction.guildId);
     disconnectFromGuild(interaction.guildId);
+
     const session = sessions.end(interaction.guildId);
+    await deleteMeeting(session.meetingId);
 
-    // M1 adds: delete data/meetings/<meetingId>/ here.
-    log.info('Session cancelled', { meetingId: session.meetingId });
+    log.info('Session cancelled, recording deleted', { meetingId: session.meetingId });
 
-    await interaction.reply(
+    await interaction.editReply(
       `🗑️ **Recording cancelled.** Nothing was saved and no summary will be posted.`,
     );
   },

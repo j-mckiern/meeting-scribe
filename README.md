@@ -3,9 +3,10 @@
 A Discord bot that records a team meeting from a voice channel, transcribes it
 with per-speaker attribution, and posts a structured summary to a text channel.
 
-**Status: milestone 0.** The bot joins and leaves voice channels and has its
-full command surface. Recording, transcription, and summarisation land in
-milestones 1-5.
+**Status: milestone 1.** The bot joins a voice channel and records it,
+producing one WAV file per burst of speech per person plus a `manifest.json`
+tying them to a timeline. Transcription and summarisation land in milestones
+2-5.
 
 ---
 
@@ -91,6 +92,15 @@ npm run register        # once
 npm run dev             # watches src/ and restarts
 ```
 
+To check what a recording actually captured:
+
+```bash
+npm run inspect -- data/meetings/<meetingId>
+```
+
+It prints the meeting as a timeline of speaker turns and verifies that every
+file in the manifest exists and is the length the manifest claims.
+
 ---
 
 ## Commands
@@ -100,7 +110,7 @@ npm run dev             # watches src/ and restarts
 | `/meeting-scribe start [title]` | Joins your current voice channel and starts recording |
 | `/meeting-scribe stop` | Leaves, transcribes, summarises, and posts to `#meeting-summary` |
 | `/meeting-scribe cancel confirm:true` | Leaves and discards everything - nothing is posted |
-| `/meeting-scribe status` | Shows whether a recording is running, and for how long |
+| `/meeting-scribe status` | Shows whether a recording is running, for how long, and who has been heard |
 
 Planned for milestone 6: `/meeting-scribe pause`, `/meeting-scribe resume`,
 `/meeting-scribe note <text>`, `/meeting-scribe retry`.
@@ -118,6 +128,20 @@ Discord voice  ->  capture/  ->  transcribe/  ->  summarize/  ->  report/  ->  #
 `capture/` is the only part that knows about Discord audio. Everything
 downstream consumes plain audio segments, which is what would make a future
 Zoom or Google Meet source a drop-in addition rather than a rewrite.
+
+Discord sends one audio stream per speaker rather than one mixed stream, so who
+said what is known exactly and no diarization model is needed. A recording is a
+directory:
+
+```
+data/meetings/<meetingId>/
+  manifest.json                 # speakers, timeline, audio format
+  audio/00006900-<userId>.wav   # one file per burst of speech, named by offset
+```
+
+`manifest.json` is rewritten after every burst, so a crash mid-meeting still
+leaves a usable recording behind - an `endedAt` of `null` is how you tell one
+that was interrupted from one that was stopped.
 
 Raw audio is deleted as soon as a transcript exists. Transcripts are kept, so a
 summary can be regenerated later without re-recording.
@@ -139,5 +163,11 @@ outdated `@discordjs/voice`: Discord now negotiates the DAVE end-to-end
 encryption protocol, which needs `@snazzah/davey` (a dependency of voice
 `>= 0.19`). Older versions stall at `signalling` or `connecting` forever.
 
-**Bot joins but hears nothing (milestone 1+).** It is server-deafened. Right-click
-the bot in the voice channel and undeafen it.
+**Bot joins but hears nothing.** It is server-deafened. Right-click the bot in
+the voice channel and undeafen it. `/meeting-scribe status` distinguishes this
+from a working recording: it reports how many segments have been captured so
+far, which stays at zero in this case.
+
+**"Joined the channel but could not start recording".** The data directory is
+not writable. In Docker it must be owned by uid 1000 - see the `chown` in the
+setup steps above.
