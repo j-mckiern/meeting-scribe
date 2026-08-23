@@ -14,6 +14,13 @@ const snowflake = z
   .string()
   .regex(/^\d{17,20}$/, 'must be a Discord ID (17-20 digits, copied via Developer Mode)');
 
+/** `.venv-whisper/bin/python` on Unix, `.venv-whisper\\Scripts\\python.exe` on Windows. */
+function defaultWhisperPython(): string {
+  return process.platform === 'win32'
+    ? '.venv-whisper\\Scripts\\python.exe'
+    : './.venv-whisper/bin/python';
+}
+
 const schema = z.object({
   DISCORD_BOT_TOKEN: z.string().min(1, 'required - the bot token from the Discord dev portal'),
   DISCORD_APPLICATION_ID: snowflake,
@@ -33,8 +40,10 @@ const schema = z.object({
   // meeting, not to be sent to an inference vendor.
   TRANSCRIBER: z.enum(['local', 'groq']).default('local'),
 
-  // Interpreter with faster-whisper installed. See README for the one-liner.
-  WHISPER_PYTHON: z.string().default('./.venv-whisper/bin/python'),
+  // Interpreter with faster-whisper installed. uv puts it in a different place
+  // on Windows, so the default is platform-dependent rather than something
+  // every Windows user has to discover by hitting ENOENT.
+  WHISPER_PYTHON: z.string().default(defaultWhisperPython()),
 
   // Any CTranslate2 Whisper model. `turbo` is ~8x faster than large-v3 at
   // close to the same quality, which is what makes CPU-only viable.

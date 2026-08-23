@@ -1,0 +1,607 @@
+{
+  "version": 1,
+  "meetingId": "long-meeting",
+  "title": "Weekly team sync",
+  "startedAt": "2026-08-20T14:00:00.000Z",
+  "endedAt": "2026-08-20T14:34:00.000Z",
+  "transcribedAt": "2026-08-20T14:34:00.000Z",
+  "provider": "fixture",
+  "model": "hand-written",
+  "participants": [
+    {
+      "userId": "1",
+      "displayName": "Aoife"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom"
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean"
+    },
+    {
+      "userId": "5",
+      "displayName": "Marcus"
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya"
+    }
+  ],
+  "utterances": [
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 0,
+      "durationMs": 9230,
+      "text": "Right, let's get started. Moving on to the main workstream first. Tom, do you want to take us through where the auth rewrite is?"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 10456,
+      "durationMs": 29615,
+      "text": "Sure. So the token refresh path is finished and merged behind the flag. Session invalidation is about half done. The part I've been stuck on this week is the migration story for existing sessions, because we've got somewhere around forty thousand live sessions at any given time and if we just cut over on deploy then every one of those people gets logged out at once. That's not something I want to do on a Tuesday afternoon."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 41517,
+      "durationMs": 3076,
+      "text": "How long is the rest of it, realistically?"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 45846,
+      "durationMs": 9615,
+      "text": "Realistically another week for the code, and then however long we decide the migration window is. The code itself isn't the hard part any more."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 56686,
+      "durationMs": 14230,
+      "text": "Could we not just dual-read for a while? Keep the old format parser around, accept both, and let the old sessions expire naturally as people's tokens age out. Then you never have a cutover moment at all."
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 72256,
+      "durationMs": 15000,
+      "text": "That's exactly what I was leaning towards. The cost is that we carry both code paths for about thirty days, which is annoying but it's not dangerous. And it means nobody notices anything happened, which is the whole point."
+    },
+    {
+      "userId": "5",
+      "displayName": "Marcus",
+      "startMs": 88758,
+      "durationMs": 2307,
+      "text": "Thirty days is the token lifetime?"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 91753,
+      "durationMs": 13076,
+      "text": "Twenty eight, so thirty gives us a bit of margin. After that anything still presenting an old format token is either a bug or someone attacking us, and either way I'm comfortable rejecting it."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 105507,
+      "durationMs": 16923,
+      "text": "Alright, let's do that. Dual-read, thirty day expiry, then we remove the old path. Tom, can you make sure that's written down somewhere before you start, including the date we're supposed to delete the old code? Otherwise it'll still be there in a year."
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 123778,
+      "durationMs": 9230,
+      "text": "Yeah, fair. I'll write it up as a short doc and put the removal date in the ticket title so it's hard to ignore."
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 134282,
+      "durationMs": 13076,
+      "text": "Does any of this touch the audit log format? We parse session identifiers out of those for the compliance report and if the shape changes I need to know before it lands, not after."
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 148947,
+      "durationMs": 15769,
+      "text": "The identifiers themselves stay the same shape, it's the signing envelope that changes. So you should be unaffected. But that's a good enough question that I'll actually verify it rather than assuming, and I'll ping you either way before I merge."
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 166273,
+      "durationMs": 2000,
+      "text": "Appreciated."
+    },
+    {
+      "userId": "5",
+      "displayName": "Marcus",
+      "startMs": 168954,
+      "durationMs": 22307,
+      "text": "One thing to flag while we're here. The load test environment is still pinned to the old auth service. If we're going to dual-read then the load tests are going to exercise a code path that doesn't reflect production any more, and the numbers we get out of it will be worse than meaningless because they'll look fine."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 191753,
+      "durationMs": 5769,
+      "text": "That's a good point and I hadn't thought about it. Can you take that one?"
+    },
+    {
+      "userId": "5",
+      "displayName": "Marcus",
+      "startMs": 198736,
+      "durationMs": 9615,
+      "text": "Yep. It's mostly config, I'd say half a day. I'll get it updated this week so it's ready before Tom's change goes anywhere near staging."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 209272,
+      "durationMs": 10769,
+      "text": "There's one more thing we never actually resolved, which is whether we're rate limiting the refresh endpoint. Right now you can hammer it as fast as you like."
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 220631,
+      "durationMs": 11538,
+      "text": "We're not, currently. I'd honestly rather not put it in the same change, because if something breaks I want to know whether it was the rewrite or the rate limiter."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 232654,
+      "durationMs": 3846,
+      "text": "No argument, I just don't want it to get forgotten."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 237903,
+      "durationMs": 9615,
+      "text": "Then let's park it explicitly rather than dropping it. It stays an open question and we pick it up once the rewrite has bedded in."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 249238,
+      "durationMs": 3076,
+      "text": "Okay, good. Let's talk about the data pipeline."
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 253913,
+      "durationMs": 12692,
+      "text": "So I dug into the nightly job like I said I would, and I found it. It's doing a sequential scan on the customer table where it used to be hitting an index."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 266990,
+      "durationMs": 2000,
+      "text": "What changed?"
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 270509,
+      "durationMs": 23461,
+      "text": "The table statistics went stale after the bulk import we did last month. The planner thought the table was still about a tenth of its actual size, so it decided a sequential scan was cheaper. Once I ran an analyse on it the plan flipped straight back to the index and the job went from about forty minutes down to six."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 295081,
+      "durationMs": 4615,
+      "text": "Forty to six. That's not a tuning improvement, that's a different job."
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 300923,
+      "durationMs": 13846,
+      "text": "It really is. And the frustrating thing is it would have been obvious immediately if anyone had looked at the plan, but the failure looked like a timeout so everybody including me assumed it was load."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 316408,
+      "durationMs": 2692,
+      "text": "Is it going to go stale again?"
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 320660,
+      "durationMs": 15769,
+      "text": "Yes, unless we do something. Autovacuum will get to it eventually but not on a useful timescale after a bulk load of that size. So it needs an explicit analyse as part of the import, which isn't there at the moment."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 338060,
+      "durationMs": 2000,
+      "text": "Can we automate that?"
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 340682,
+      "durationMs": 13846,
+      "text": "Easily. I'll add it to the end of the import job so it runs immediately after the load completes. It adds maybe ninety seconds to an import that already takes twenty minutes, so nobody will notice."
+    },
+    {
+      "userId": "5",
+      "displayName": "Marcus",
+      "startMs": 356104,
+      "durationMs": 18461,
+      "text": "I'd also want an alert on the nightly job duration. If it goes over fifteen minutes we should hear about it, because right now the only way we found out was that it eventually started failing outright. It was degraded for a week before that and nobody knew."
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 374895,
+      "durationMs": 6153,
+      "text": "Agreed, that's the actual lesson. I'll add the duration alert as well as the analyse step."
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 382430,
+      "durationMs": 4615,
+      "text": "Do we know if anything downstream broke while it was timing out?"
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 387474,
+      "durationMs": 21153,
+      "text": "The reporting tables were stale for about a week, so anything anyone pulled in that window was showing old numbers. I've backfilled them now and I went and checked with finance, and luckily they hadn't run their monthly pull yet. If this had happened a week later it would have gone into a board deck."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 409048,
+      "durationMs": 4230,
+      "text": "That's uncomfortably close. Is there anything that would have caught that?"
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 413651,
+      "durationMs": 9230,
+      "text": "A freshness check on the reporting tables would have. That's a bigger piece of work though, I don't want to promise it this week."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 423570,
+      "durationMs": 6538,
+      "text": "Fine, but let's not lose it. Add it as an open question and we'll scope it properly."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 430903,
+      "durationMs": 6923,
+      "text": "Separately, the schema change for the events table has been sitting in review for about nine days now."
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 439354,
+      "durationMs": 8076,
+      "text": "Yeah, that's on me and I'm sorry. I'll review it today, it's not a big change I just kept deprioritising it."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 447791,
+      "durationMs": 3846,
+      "text": "Right, let's do on-call. Marcus, you were on last week."
+    },
+    {
+      "userId": "5",
+      "displayName": "Marcus",
+      "startMs": 452887,
+      "durationMs": 4615,
+      "text": "Fairly quiet, all things considered. Four pages in total across the week."
+    },
+    {
+      "userId": "5",
+      "displayName": "Marcus",
+      "startMs": 458470,
+      "durationMs": 18846,
+      "text": "Two of them were the disk alert again, and both were false. One was a genuine deploy failure that rolled back cleanly on its own, so that one worked exactly as designed and I didn't have to do anything. And the fourth was the certificate expiry warning on staging."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 478518,
+      "durationMs": 9615,
+      "text": "The disk alert. We talked about retuning that last week and then didn't do anything about it, which is a pattern I'd like to break."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 489643,
+      "durationMs": 18461,
+      "text": "I did actually look at it, I just didn't change anything. The threshold is set at eighty percent, and the volume it's watching sits at eighty two or eighty three fairly regularly during the batch window and then comes back down on its own within about twenty minutes."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 508804,
+      "durationMs": 11538,
+      "text": "So it's not wrong exactly, it's just measuring the wrong thing. What we care about is whether it's going to fill up, not whether it's temporarily above an arbitrary line."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 521705,
+      "durationMs": 2000,
+      "text": "So what's the right answer?"
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 524483,
+      "durationMs": 13461,
+      "text": "Rate of growth. Alert if it's growing fast enough to hit a hundred percent within some window, say six hours. That's what actually matters and it wouldn't fire at all during a normal batch run."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 539555,
+      "durationMs": 4230,
+      "text": "And how much work is that versus just moving the threshold?"
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 544687,
+      "durationMs": 12307,
+      "text": "Moving the threshold is five minutes. Rate of growth is a couple of hours because I'd have to work out how to express it in our alerting language, which I've never done."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 558317,
+      "durationMs": 11153,
+      "text": "Then do the five minute version now so it stops waking people up, and let's treat the proper fix as separate work rather than pretending we'll get to it."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 569779,
+      "durationMs": 3461,
+      "text": "That's fair. I'll bump it to ninety this afternoon."
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 574896,
+      "durationMs": 2000,
+      "text": "What was the certificate one?"
+    },
+    {
+      "userId": "5",
+      "displayName": "Marcus",
+      "startMs": 577370,
+      "durationMs": 12307,
+      "text": "Staging wildcard, thirty days out from expiry. It auto-renews at fourteen days so it's never actually going to expire, but the warning fires anyway and it fires every day until renewal happens."
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 590913,
+      "durationMs": 3461,
+      "text": "Can we just suppress it for staging? It's staging."
+    },
+    {
+      "userId": "5",
+      "displayName": "Marcus",
+      "startMs": 596015,
+      "durationMs": 17307,
+      "text": "We could, but then if auto-renewal genuinely failed we'd find out when staging broke, which is not a great way to find out. I'd rather fix the alert so it checks whether renewal is configured and working, rather than just looking at the expiry date."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 614191,
+      "durationMs": 2000,
+      "text": "How much work?"
+    },
+    {
+      "userId": "5",
+      "displayName": "Marcus",
+      "startMs": 617324,
+      "durationMs": 6153,
+      "text": "An hour or two. It's not complicated, it's just that nobody's annoyed enough to do it."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 624905,
+      "durationMs": 7692,
+      "text": "Do it. Noisy alerts are how real alerts get missed, and we've got two examples of that in one week."
+    },
+    {
+      "userId": "5",
+      "displayName": "Marcus",
+      "startMs": 633067,
+      "durationMs": 2000,
+      "text": "Yep, I'll pick it up."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 636816,
+      "durationMs": 3846,
+      "text": "Last thing on the agenda. Let's talk about Project Aurora."
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 641482,
+      "durationMs": 8076,
+      "text": "Designs are signed off as of Thursday, and I've started on the scaffolding. Repo's up, CI is green, nothing interesting yet."
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 650503,
+      "durationMs": 15769,
+      "text": "The thing I want to raise, because I think it's a decision rather than something I should just make, is the component library question. We can either build on the existing internal library or start fresh with something off the shelf."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 667042,
+      "durationMs": 2692,
+      "text": "What's actually wrong with the internal one?"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 671084,
+      "durationMs": 19615,
+      "text": "Nothing's wrong with it as such. But it hasn't had a meaningful commit in about two years, it's still on the old build tooling, and it's missing roughly half the components these designs call for. Date pickers, the multi-select, the whole table component with sorting and pagination, none of that exists."
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 691590,
+      "durationMs": 3461,
+      "text": "How much of that gap could we close ourselves?"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 695411,
+      "durationMs": 16923,
+      "text": "All of it, technically. I'd estimate about three weeks to build the missing pieces to a standard I'd be happy shipping. But that's three weeks where we're building components instead of building the portal, and the portal is the thing anyone actually asked for."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 712777,
+      "durationMs": 2307,
+      "text": "And the off the shelf option?"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 716537,
+      "durationMs": 17692,
+      "text": "Much faster to start, we'd be building real screens inside a week. The cost is that we'd then have two component libraries in the organisation, and at some point somebody has to reconcile that, and it won't be a small job by the time it happens."
+    },
+    {
+      "userId": "5",
+      "displayName": "Marcus",
+      "startMs": 734750,
+      "durationMs": 17307,
+      "text": "We've been here before with the charting libraries. We ended up with three of them and it took the best part of two years to get back down to one, and that whole time everything looked slightly different depending on which page you were on."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 753177,
+      "durationMs": 6923,
+      "text": "That's a real argument but it's also survivorship bias a bit. We shipped things during those two years."
+    },
+    {
+      "userId": "5",
+      "displayName": "Marcus",
+      "startMs": 760620,
+      "durationMs": 12692,
+      "text": "We did, I'm not saying don't do it. I'm saying if we do it we should decide up front which one wins eventually, rather than discovering in eighteen months that nobody ever decided."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 774207,
+      "durationMs": 8461,
+      "text": "That's the right framing. And I don't think we should decide this in a meeting on a Wednesday with fifteen minutes left."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 783759,
+      "durationMs": 12692,
+      "text": "Tom, can you write both options up properly, with rough numbers on the three weeks and some sense of what the reconciliation would actually involve, and we'll make an actual decision next week?"
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 796887,
+      "durationMs": 3076,
+      "text": "Yeah, I can have that ready by Monday."
+    },
+    {
+      "userId": "2",
+      "displayName": "Sean",
+      "startMs": 800297,
+      "durationMs": 17307,
+      "text": "One thing worth doing before you write it up. Ask the design team whether they'd flex on any of the missing components. If two of the five are negotiable then the three week number might be a one week number and the whole question changes."
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 819306,
+      "durationMs": 3846,
+      "text": "That's a really good point, I'll talk to them first."
+    },
+    {
+      "userId": "3",
+      "displayName": "Priya",
+      "startMs": 823453,
+      "durationMs": 8461,
+      "text": "Are we time boxed on Aurora at all? Because if there's a date attached then that changes which way we should lean."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 832651,
+      "durationMs": 11538,
+      "text": "There's no hard external date, but there's an expectation it's usable by the end of the quarter. I'd rather we didn't burn three of the remaining twelve weeks on components."
+    },
+    {
+      "userId": "4",
+      "displayName": "Tom",
+      "startMs": 844918,
+      "durationMs": 3461,
+      "text": "Noted. I'll make sure that's in the write up."
+    },
+    {
+      "userId": "1",
+      "displayName": "Aoife",
+      "startMs": 848786,
+      "durationMs": 3076,
+      "text": "Anything else from anyone? No? Good. Thanks everyone."
+    }
+  ],
+  "stats": {
+    "segments": 80,
+    "transcribed": 80,
+    "skippedQuiet": 0,
+    "discarded": 0,
+    "failed": 0
+  },
+  "timing": {
+    "audioSeconds": 853.124,
+    "prepareSeconds": 0,
+    "transcribeSeconds": 1,
+    "realtimeFactor": 1
+  }
+}

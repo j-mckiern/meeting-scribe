@@ -15,7 +15,8 @@
     "inspect": "tsx scripts/inspect-manifest.ts",
     "transcribe": "tsx scripts/transcribe-dir.ts",
     "summarize": "tsx scripts/summarize-dir.ts",
-    "check-summaries": "tsx scripts/check-summaries.ts"
+    "check-summaries": "tsx scripts/check-summaries.ts",
+    "bench-summarize": "tsx scripts/bench-summarize.ts"
   },
   "dependencies": {
     "@discordjs/opus": "^0.10.0",
